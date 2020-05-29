@@ -8,13 +8,13 @@ def homofilter(input):
     input = cv2.cvtColor(input, cv2.COLOR_BGR2GRAY) #灰度化
     imagepre = np.double(input)  #先转化为double型
     
-    Firstlog = np.log(imagepre + 0.01)  #第一步取对数(+0.01保证log真数都大于0)
+    Firstlog = np.log(imagepre + 1)  #第一步取对数(+0.01保证log真数都大于0)
     Secondfft = np.fft.fft2(Firstlog)   #第二步傅里叶变换
     
     #第三步设计滤波器
-    c = 2   #常数c用于控制坡度的锐利度，它在rl和rh之间过渡
+    c = 1   #常数c用于控制坡度的锐利度，它在rl和rh之间过渡
     D0 = 80
-    rh = 2 
+    rh = 1 
     rl = 0.25
     h = image.shape[0]
     w = image.shape[1]
@@ -34,7 +34,7 @@ def homofilter(input):
     Fourthifft = np.fft.ifft2(H * Secondfft) 
     
     #第五步 取指数再减回去最初加的,  #取实部
-    result = np.real(np.exp(Fourthifft) - 0.01) 
+    result = np.real(np.exp(Fourthifft) - 1) 
 
     return result
             
